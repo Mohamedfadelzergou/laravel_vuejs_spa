@@ -14,7 +14,9 @@
     </head>
     <body>
         <div id="app">
-            <Myheader/>
+            <div class="container">
+                <Myheader/>
+            </div>
         </div>
         <script src="{{asset('js/app.js')}}"></script>
     </body>
