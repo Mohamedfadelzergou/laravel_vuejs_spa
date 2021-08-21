@@ -19,6 +19,10 @@ class PostController extends Controller
         $post->title=$request->title;
         $post->body=$request->body;
         $post->save();
-
+        return response()->json(["status"=>"success","data"=>$post]);
+    }
+    public function getPosts(){
+        $posts= Post::all();
+        return response()->json(["data"=>$posts]);
     }
 }

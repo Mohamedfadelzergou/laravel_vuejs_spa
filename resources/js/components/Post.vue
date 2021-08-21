@@ -29,7 +29,12 @@
             </div>
         </div>
         </div>
+        <div v-for="post in posts" :key="post.id">
+            <h4>{{post.title}}</h4>
+            <p>{{post.body}}</p>
+        </div>
     </div>
+
 </template>
 <script>
 export default {
@@ -42,6 +47,7 @@ export default {
 
             },
             errors:[],
+            posts:{}
         }
     },
     methods:{
@@ -50,8 +56,29 @@ export default {
                 if(response.data.status=='error'){
                     this.errors=response.data.errors;
                 }
+                else if (response.data.status=='success'){
+                    this.posts.unshift(response.data.data)
+                    Toast.fire({
+                    icon: 'success',
+                    title: 'Created successfully'
+                    })
+                    this.errors=[]
+                    this.post={
+                        id:'',
+                        title:'',
+                        body:'',
+                        }
+                }
             })
-        }
+        },
+        getPosts(){
+            axios.get('api/getPosts').then(response=>{
+                this.posts=response.data.data;
+            })
+        },
+    },
+    created(){
+        this.getPosts()
     }
 }
 </script>

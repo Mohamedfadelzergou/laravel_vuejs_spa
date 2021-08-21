@@ -1988,6 +1988,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1996,7 +2001,8 @@ __webpack_require__.r(__webpack_exports__);
         title: '',
         body: ''
       },
-      errors: []
+      errors: [],
+      posts: {}
     };
   },
   methods: {
@@ -2006,9 +2012,32 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('api/creatPost', this.post).then(function (response) {
         if (response.data.status == 'error') {
           _this.errors = response.data.errors;
+        } else if (response.data.status == 'success') {
+          _this.posts.unshift(response.data.data);
+
+          Toast.fire({
+            icon: 'success',
+            title: 'Created successfully'
+          });
+          _this.errors = [];
+          _this.post = {
+            id: '',
+            title: '',
+            body: ''
+          };
         }
       });
+    },
+    getPosts: function getPosts() {
+      var _this2 = this;
+
+      axios.get('api/getPosts').then(function (response) {
+        _this2.posts = response.data.data;
+      });
     }
+  },
+  created: function created() {
+    this.getPosts();
   }
 });
 
@@ -40878,139 +40907,155 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-success btn-sm float-right",
-        attrs: {
-          type: "button",
-          "data-toggle": "modal",
-          "data-target": "#exampleModal"
-        }
-      },
-      [_vm._v("\n    New Post\n    ")]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "modal fade",
-        attrs: {
-          id: "exampleModal",
-          tabindex: "-1",
-          role: "dialog",
-          "aria-labelledby": "exampleModalLabel",
-          "aria-hidden": "true"
-        }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "modal-dialog", attrs: { role: "document" } },
-          [
-            _c("div", { staticClass: "modal-content" }, [
-              _vm._m(0),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }, [
-                _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.post.title,
-                      expression: "post.title"
-                    }
-                  ],
-                  class: [
-                    "form-control my-2",
-                    _vm.errors.title ? "is-invalid" : ""
-                  ],
-                  attrs: { type: "text", name: "title", placeholder: "Title" },
-                  domProps: { value: _vm.post.title },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+  return _c(
+    "div",
+    [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-success btn-sm float-right",
+          attrs: {
+            type: "button",
+            "data-toggle": "modal",
+            "data-target": "#exampleModal"
+          }
+        },
+        [_vm._v("\n    New Post\n    ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "exampleModal",
+            tabindex: "-1",
+            role: "dialog",
+            "aria-labelledby": "exampleModalLabel",
+            "aria-hidden": "true"
+          }
+        },
+        [
+          _c(
+            "div",
+            { staticClass: "modal-dialog", attrs: { role: "document" } },
+            [
+              _c("div", { staticClass: "modal-content" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "modal-body" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.post.title,
+                        expression: "post.title"
                       }
-                      _vm.$set(_vm.post, "title", $event.target.value)
-                    }
-                  }
-                }),
-                _vm._v(" "),
-                _vm.errors.title
-                  ? _c(
-                      "span",
-                      { staticClass: "bg-danger text-white p-1 rounded" },
-                      [_vm._v(_vm._s(_vm.errors.title[0]))]
-                    )
-                  : _vm._e(),
-                _vm._v(" "),
-                _c("textarea", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.post.body,
-                      expression: "post.body"
-                    }
-                  ],
-                  class: [
-                    "form-control my-2",
-                    _vm.errors.body ? "is-invalid" : ""
-                  ],
-                  attrs: {
-                    name: "body",
-                    cols: "30",
-                    rows: "10",
-                    placeholder: "Body"
-                  },
-                  domProps: { value: _vm.post.body },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                    ],
+                    class: [
+                      "form-control my-2",
+                      _vm.errors.title ? "is-invalid" : ""
+                    ],
+                    attrs: {
+                      type: "text",
+                      name: "title",
+                      placeholder: "Title"
+                    },
+                    domProps: { value: _vm.post.title },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.post, "title", $event.target.value)
                       }
-                      _vm.$set(_vm.post, "body", $event.target.value)
                     }
-                  }
-                }),
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.title
+                    ? _c(
+                        "span",
+                        { staticClass: "bg-danger text-white p-1 rounded" },
+                        [_vm._v(_vm._s(_vm.errors.title[0]))]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.post.body,
+                        expression: "post.body"
+                      }
+                    ],
+                    class: [
+                      "form-control my-2",
+                      _vm.errors.body ? "is-invalid" : ""
+                    ],
+                    attrs: {
+                      name: "body",
+                      cols: "30",
+                      rows: "10",
+                      placeholder: "Body"
+                    },
+                    domProps: { value: _vm.post.body },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.post, "body", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _vm.errors.body
+                    ? _c(
+                        "span",
+                        { staticClass: "bg-danger text-white p-1 rounded" },
+                        [_vm._v(_vm._s(_vm.errors.body[0]))]
+                      )
+                    : _vm._e()
+                ]),
                 _vm._v(" "),
-                _vm.errors.body
-                  ? _c(
-                      "span",
-                      { staticClass: "bg-danger text-white p-1 rounded" },
-                      [_vm._v(_vm._s(_vm.errors.body[0]))]
-                    )
-                  : _vm._e()
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "modal-footer" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger",
-                    attrs: { type: "button", "data-dismiss": "modal" }
-                  },
-                  [_vm._v("Close")]
-                ),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-success",
-                    attrs: { type: "button" },
-                    on: { click: _vm.creatPost }
-                  },
-                  [_vm._v("Create")]
-                )
+                _c("div", { staticClass: "modal-footer" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: { type: "button", "data-dismiss": "modal" }
+                    },
+                    [_vm._v("Close")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button" },
+                      on: { click: _vm.creatPost }
+                    },
+                    [_vm._v("Create")]
+                  )
+                ])
               ])
-            ])
-          ]
-        )
-      ]
-    )
-  ])
+            ]
+          )
+        ]
+      ),
+      _vm._v(" "),
+      _vm._l(_vm.posts, function(post) {
+        return _c("div", { key: post.id }, [
+          _c("h4", [_vm._v(_vm._s(post.title))]),
+          _vm._v(" "),
+          _c("p", [_vm._v(_vm._s(post.body))])
+        ])
+      })
+    ],
+    2
+  )
 }
 var staticRenderFns = [
   function() {
@@ -56475,7 +56520,7 @@ var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.mixin({
     toast.addEventListener('mouseleave', sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.resumeTimer);
   }
 });
-window.Swal = sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a;
+window.Toast = Toast;
 var routes = [{
   path: '/login',
   component: _components_Login__WEBPACK_IMPORTED_MODULE_2__["default"]
@@ -56493,7 +56538,6 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 var app = new Vue({
   el: '#app',
   router: router,
-  Toast: Toast,
   components: {
     Myheader: _components_Myheader__WEBPACK_IMPORTED_MODULE_1__["default"],
     Login: _components_Login__WEBPACK_IMPORTED_MODULE_2__["default"],

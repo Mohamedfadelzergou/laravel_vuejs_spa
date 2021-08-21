@@ -20,7 +20,7 @@ const Toast = Swal.mixin({
     toast.addEventListener('mouseleave', Swal.resumeTimer)
   }
 })
-window.Swal =Swal
+window.Toast =Toast
 const routes = [
     { path: '/login', component: Login },
     { path: '/register', component: Register },
@@ -33,7 +33,6 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     router,
-    Toast,
     components:{
         Myheader,
         Login,
