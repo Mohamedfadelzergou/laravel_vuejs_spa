@@ -1993,6 +1993,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2002,7 +2010,8 @@ __webpack_require__.r(__webpack_exports__);
         body: ''
       },
       errors: [],
-      posts: {}
+      posts: {},
+      edit: false
     };
   },
   methods: {
@@ -2033,6 +2042,53 @@ __webpack_require__.r(__webpack_exports__);
 
       axios.get('api/getPosts').then(function (response) {
         _this2.posts = response.data.data;
+      });
+    },
+    editPost: function editPost(post) {
+      this.post = post;
+      this.edit = true;
+    },
+    updatePost: function updatePost() {
+      var _this3 = this;
+
+      axios.put('api/updatePost/' + this.post.id, this.post).then(function (response) {
+        if (response.data.status == 'error') {
+          _this3.errors = response.data.errors;
+        } else if (response.data.status == 'success') {
+          Toast.fire({
+            icon: 'success',
+            title: 'Updated successfully'
+          });
+          _this3.errors = [];
+          _this3.post = {
+            id: '',
+            title: '',
+            body: ''
+          };
+        }
+      });
+    },
+    deletePost: function deletePost(postid) {
+      var _this4 = this;
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          axios["delete"]('api/deletePost/' + postid).then(function (response) {
+            if (response.data.status == 'success') {
+              Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
+
+              _this4.getPosts();
+            }
+          });
+        }
       });
     }
   },
@@ -40941,7 +40997,27 @@ var render = function() {
             { staticClass: "modal-dialog", attrs: { role: "document" } },
             [
               _c("div", { staticClass: "modal-content" }, [
-                _vm._m(0),
+                _c("div", { staticClass: "modal-header" }, [
+                  _vm.edit
+                    ? _c(
+                        "h5",
+                        {
+                          staticClass: "modal-title",
+                          attrs: { id: "exampleModalLabel" }
+                        },
+                        [_vm._v("Update")]
+                      )
+                    : _c(
+                        "h5",
+                        {
+                          staticClass: "modal-title",
+                          attrs: { id: "exampleModalLabel" }
+                        },
+                        [_vm._v("Create")]
+                      ),
+                  _vm._v(" "),
+                  _vm._m(0)
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "modal-body" }, [
                   _c("input", {
@@ -41030,15 +41106,25 @@ var render = function() {
                     [_vm._v("Close")]
                   ),
                   _vm._v(" "),
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-success",
-                      attrs: { type: "button" },
-                      on: { click: _vm.creatPost }
-                    },
-                    [_vm._v("Create")]
-                  )
+                  _vm.edit
+                    ? _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success",
+                          attrs: { type: "button" },
+                          on: { click: _vm.updatePost }
+                        },
+                        [_vm._v("Update")]
+                      )
+                    : _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-success",
+                          attrs: { type: "button" },
+                          on: { click: _vm.creatPost }
+                        },
+                        [_vm._v("Create")]
+                      )
                 ])
               ])
             ]
@@ -41047,10 +41133,42 @@ var render = function() {
       ),
       _vm._v(" "),
       _vm._l(_vm.posts, function(post) {
-        return _c("div", { key: post.id }, [
+        return _c("div", { key: post.id, staticClass: "my-3" }, [
           _c("h4", [_vm._v(_vm._s(post.title))]),
           _vm._v(" "),
-          _c("p", [_vm._v(_vm._s(post.body))])
+          _c("p", [_vm._v(_vm._s(post.body))]),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-success btn-sm float-right",
+              attrs: {
+                type: "button",
+                "data-toggle": "modal",
+                "data-target": "#exampleModal"
+              },
+              on: {
+                click: function($event) {
+                  return _vm.editPost(post)
+                }
+              }
+            },
+            [_vm._v("\n        Edit\n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-danger btn-sm float-right",
+              attrs: { type: "button" },
+              on: {
+                click: function($event) {
+                  return _vm.deletePost(post.id)
+                }
+              }
+            },
+            [_vm._v("\n        delete\n        ")]
+          )
         ])
       })
     ],
@@ -41062,26 +41180,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "h5",
-        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-        [_vm._v("Create")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true

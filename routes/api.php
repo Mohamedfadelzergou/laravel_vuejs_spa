@@ -19,3 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::Post('creatPost','PostController@creatPost');
 Route::get('getPosts','PostController@getPosts');
+Route::put('updatePost/{postid}','PostController@updatePost');
+Route::delete('deletePost/{postid}','PostController@deletePost');
+

@@ -10,7 +10,8 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create</h5>
+                <h5 v-if="edit" class="modal-title" id="exampleModalLabel">Update</h5>
+                <h5 v-else class="modal-title" id="exampleModalLabel">Create</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -23,15 +24,22 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" @click="creatPost">Create</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>                
+                <button v-if="edit" type="button" class="btn btn-success" @click="updatePost">Update</button>
+                <button v-else type="button" class="btn btn-success" @click="creatPost">Create</button>
             </div>
             </div>
         </div>
         </div>
-        <div v-for="post in posts" :key="post.id">
+        <div v-for="post in posts" :key="post.id" class="my-3">
             <h4>{{post.title}}</h4>
             <p>{{post.body}}</p>
+            <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#exampleModal" @click="editPost(post)">
+            Edit
+            </button>
+            <button type="button" class="btn btn-danger btn-sm float-right" @click="deletePost(post.id)">
+            delete
+            </button>
         </div>
     </div>
 
@@ -47,7 +55,8 @@ export default {
 
             },
             errors:[],
-            posts:{}
+            posts:{},
+            edit:false,
         }
     },
     methods:{
@@ -76,6 +85,54 @@ export default {
                 this.posts=response.data.data;
             })
         },
+        editPost(post){
+            this.post=post;
+            this.edit=true;
+        },
+        updatePost(){
+            axios.put('api/updatePost/'+this.post.id,this.post).then(response=>{
+                if(response.data.status=='error'){
+                    this.errors=response.data.errors;
+                }
+                else if (response.data.status=='success'){
+                    Toast.fire({
+                    icon: 'success',
+                    title: 'Updated successfully'
+                    })
+                    this.errors=[]
+                    this.post={
+                        id:'',
+                        title:'',
+                        body:'',
+                        }
+                }
+            })
+        },
+        deletePost(postid){
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete('api/deletePost/'+postid).then(response=>{
+                    if(response.data.status=='success'){
+                        Swal.fire(
+                        'Deleted!',
+                        'Your file has been deleted.',
+                        'success'
+                        )
+                        this.getPosts();
+                    }
+                })
+                
+            }
+            })
+        }
     },
     created(){
         this.getPosts()
