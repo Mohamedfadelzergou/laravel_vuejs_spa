@@ -14,7 +14,7 @@ class AddColumnDeletedAtPost extends Migration
     public function up()
     {
         Schema::table('posts', function (Blueprint $table) {
-            //
+        $table->dateTime('deleted_at')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddColumnDeletedAtPost extends Migration
     public function down()
     {
         Schema::table('posts', function (Blueprint $table) {
-            $table->dateTime('deleted_at')->nullable();
+
         });
     }
 }

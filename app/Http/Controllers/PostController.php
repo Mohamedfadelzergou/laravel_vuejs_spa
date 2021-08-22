@@ -22,7 +22,7 @@ class PostController extends Controller
         return response()->json(["status"=>"success","data"=>$post]);
     }
     public function getPosts(){
-        $posts= Post::all();
+        $posts= Post::paginate(3);
         return response()->json(["data"=>$posts]);
     }
     public function updatePost(Request $request,$postid){

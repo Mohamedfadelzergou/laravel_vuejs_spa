@@ -31,7 +31,7 @@
             </div>
         </div>
         </div>
-        <div v-for="post in posts" :key="post.id" class="my-3">
+        <div v-for="post in posts.data" :key="post.id" class="my-3">
             <h4>{{post.title}}</h4>
             <p>{{post.body}}</p>
             <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal" data-target="#exampleModal" @click="editPost(post)">
@@ -41,6 +41,7 @@
             delete
             </button>
         </div>
+        <pagination :data="posts" @pagination-change-page="getPosts"></pagination>
     </div>
 
 </template>
@@ -66,7 +67,7 @@ export default {
                     this.errors=response.data.errors;
                 }
                 else if (response.data.status=='success'){
-                    this.posts.unshift(response.data.data)
+                    this.getPosts()
                     Toast.fire({
                     icon: 'success',
                     title: 'Created successfully'
@@ -80,8 +81,8 @@ export default {
                 }
             })
         },
-        getPosts(){
-            axios.get('api/getPosts').then(response=>{
+        getPosts(page=1){
+            axios.get('api/getPosts?page='+page).then(response=>{
                 this.posts=response.data.data;
             })
         },
