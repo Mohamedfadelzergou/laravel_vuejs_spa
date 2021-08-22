@@ -17,9 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::Post('creatPost','PostController@creatPost');
+Route::group(['middleware'=>'auth'],function(){
+    Route::Post('creatPost','PostController@creatPost');
+    Route::put('updatePost/{postid}','PostController@updatePost');
+    Route::delete('deletePost/{postid}','PostController@deletePost');    
+    Route::Post('logout','UserController@logout');
+});
 Route::get('getPosts','PostController@getPosts');
-Route::put('updatePost/{postid}','PostController@updatePost');
-Route::delete('deletePost/{postid}','PostController@deletePost');
 Route::Post('register','UserController@register');
 Route::Post('login','UserController@login');

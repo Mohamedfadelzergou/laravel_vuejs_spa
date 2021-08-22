@@ -62,7 +62,8 @@ export default {
     },
     methods:{
         creatPost(){
-            axios.post('api/creatPost',this.post).then(response=>{
+            let token=localStorage.getItem('token')
+            axios.post('api/creatPost?token='+token,this.post).then(response=>{
                 if(response.data.status=='error'){
                     this.errors=response.data.errors;
                 }
@@ -91,7 +92,8 @@ export default {
             this.edit=true;
         },
         updatePost(){
-            axios.put('api/updatePost/'+this.post.id,this.post).then(response=>{
+            let token=localStorage.getItem('token')
+            axios.put('api/updatePost/'+this.post.id+'?token='+token,this.post).then(response=>{
                 if(response.data.status=='error'){
                     this.errors=response.data.errors;
                 }
@@ -110,6 +112,7 @@ export default {
             })
         },
         deletePost(postid){
+            let token=localStorage.getItem('token')
             Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -120,7 +123,7 @@ export default {
             confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete('api/deletePost/'+postid).then(response=>{
+                axios.delete('api/deletePost/'+postid+'?token='+token).then(response=>{
                     if(response.data.status=='success'){
                         Swal.fire(
                         'Deleted!',

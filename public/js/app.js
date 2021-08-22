@@ -1993,6 +1993,39 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Myheader.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Myheader.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {};
+  },
+  methods: {
+    logout: function logout() {
+      var token = localStorage.getItem('token');
+      axios.post('api/logout?token=' + token).then(function (response) {
+        localStorage.setItem('token', '');
+      });
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Post.vue?vue&type=script&lang=js&":
 /*!***************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Post.vue?vue&type=script&lang=js& ***!
@@ -2066,7 +2099,8 @@ __webpack_require__.r(__webpack_exports__);
     creatPost: function creatPost() {
       var _this = this;
 
-      axios.post('api/creatPost', this.post).then(function (response) {
+      var token = localStorage.getItem('token');
+      axios.post('api/creatPost?token=' + token, this.post).then(function (response) {
         if (response.data.status == 'error') {
           _this.errors = response.data.errors;
         } else if (response.data.status == 'success') {
@@ -2100,7 +2134,8 @@ __webpack_require__.r(__webpack_exports__);
     updatePost: function updatePost() {
       var _this3 = this;
 
-      axios.put('api/updatePost/' + this.post.id, this.post).then(function (response) {
+      var token = localStorage.getItem('token');
+      axios.put('api/updatePost/' + this.post.id + '?token=' + token, this.post).then(function (response) {
         if (response.data.status == 'error') {
           _this3.errors = response.data.errors;
         } else if (response.data.status == 'success') {
@@ -2120,6 +2155,7 @@ __webpack_require__.r(__webpack_exports__);
     deletePost: function deletePost(postid) {
       var _this4 = this;
 
+      var token = localStorage.getItem('token');
       Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -2130,7 +2166,7 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.isConfirmed) {
-          axios["delete"]('api/deletePost/' + postid).then(function (response) {
+          axios["delete"]('api/deletePost/' + postid + '?token=' + token).then(function (response) {
             if (response.data.status == 'success') {
               Swal.fire('Deleted!', 'Your file has been deleted.', 'success');
 
@@ -41671,6 +41707,12 @@ var render = function() {
         "router-link",
         { staticClass: "btn btn-primary m-1", attrs: { to: "/post" } },
         [_vm._v("Post")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        { staticClass: "btn btn-primary m-1", on: { click: _vm.logout } },
+        [_vm._v("Logout")]
       )
     ],
     1
@@ -57595,15 +57637,17 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Myheader_vue_vue_type_template_id_36c9d024___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Myheader.vue?vue&type=template&id=36c9d024& */ "./resources/js/components/Myheader.vue?vue&type=template&id=36c9d024&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _Myheader_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Myheader.vue?vue&type=script&lang=js& */ "./resources/js/components/Myheader.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Myheader_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _Myheader_vue_vue_type_template_id_36c9d024___WEBPACK_IMPORTED_MODULE_0__["render"],
   _Myheader_vue_vue_type_template_id_36c9d024___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -57617,6 +57661,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/js/components/Myheader.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Myheader.vue?vue&type=script&lang=js&":
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/Myheader.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Myheader_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Myheader.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Myheader.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Myheader_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 

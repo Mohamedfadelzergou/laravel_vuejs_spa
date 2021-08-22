@@ -27,4 +27,10 @@ class UserController extends Controller
         
         return response()->json(['status' => 'error']);
     }
+    public function logout()
+    {
+        auth()->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
+    }
 }
